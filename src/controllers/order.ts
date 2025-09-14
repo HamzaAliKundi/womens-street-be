@@ -227,9 +227,25 @@ export const getAllOrders = asyncHandler(async (req: Request, res: Response): Pr
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const status = req.query.status as string;
+  const search = req.query.search as string;
 
   const filter: any = {};
+  
+  // Status filter
   if (status) filter.status = status;
+  
+  // Search filter - search in order number, customer name, email, and phone
+  if (search) {
+    const searchRegex = { $regex: search, $options: 'i' };
+    filter.$or = [
+      { orderNumber: searchRegex },
+      { 'customerDetails.name': searchRegex },
+      { 'customerDetails.email': searchRegex },
+      { 'customerDetails.phone': searchRegex },
+      { 'customerDetails.city': searchRegex },
+      { 'customerDetails.address': searchRegex }
+    ];
+  }
 
   const skip = (page - 1) * limit;
 
