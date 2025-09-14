@@ -205,3 +205,14 @@ export const searchProducts = asyncHandler(async (req: Request, res: Response): 
     }
   });
 });
+
+// Get all unique categories
+export const getCategories = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const categories = await Product.distinct('category');
+
+  res.status(200).json({
+    message: 'Categories fetched successfully',
+    status: 200,
+    categories: categories.sort() // Sort alphabetically
+  });
+});

@@ -79,7 +79,27 @@ const ProductSchema: Schema = new Schema({
   timestamps: true
 });
 
+// Pre-save hook to automatically update inStock based on stockQuantity
+ProductSchema.pre('save', function(next) {
+  // @ts-ignore
+  this.inStock = this.stockQuantity > 0;
+  next();
+});
+
+// Pre-update hook for findOneAndUpdate operations
+ProductSchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function(next) {
+  const update = this.getUpdate() as any;
+  if (update && update.$set && typeof update.$set.stockQuantity === 'number') {
+    update.$set.inStock = update.$set.stockQuantity > 0;
+  } else if (update && typeof update.stockQuantity === 'number') {
+    update.inStock = update.stockQuantity > 0;
+  }
+  next();
+});
+
 // Index for better search performance
 ProductSchema.index({ name: 'text', description: 'text', category: 'text' });
+ProductSchema.index({ inStock: 1 });
+ProductSchema.index({ stockQuantity: 1 });
 
 export default mongoose.model<IProduct>('Product', ProductSchema);

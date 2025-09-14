@@ -6,7 +6,8 @@ import {
   updateProduct,
   deleteProduct,
   getProductsByCategory,
-  searchProducts
+  searchProducts,
+  getCategories
 } from '../controllers/product';
 import { authMiddleware } from '../middleware/auth';
 import { adminMiddleware } from '../middleware/admin';
@@ -15,6 +16,7 @@ const router = Router();
 
 // Public routes (no authentication required)
 router.get('/', getProducts);
+router.get('/categories', getCategories); // New categories endpoint
 router.get('/search', searchProducts);
 router.get('/category/:category', getProductsByCategory);
 router.get('/:id', getProduct);

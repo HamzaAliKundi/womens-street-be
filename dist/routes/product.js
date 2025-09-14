@@ -7,6 +7,7 @@ const admin_1 = require("../middleware/admin");
 const router = (0, express_1.Router)();
 // Public routes (no authentication required)
 router.get('/', product_1.getProducts);
+router.get('/categories', product_1.getCategories); // New categories endpoint
 router.get('/search', product_1.searchProducts);
 router.get('/category/:category', product_1.getProductsByCategory);
 router.get('/:id', product_1.getProduct);

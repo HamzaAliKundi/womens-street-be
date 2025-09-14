@@ -34,86 +34,62 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const ProductSchema = new mongoose_1.Schema({
-    name: {
+const CartItemSchema = new mongoose_1.Schema({
+    productId: {
         type: String,
         required: true,
-        trim: true
+        ref: 'Product'
     },
-    description: {
-        type: String,
-        required: true
+    quantity: {
+        type: Number,
+        required: true,
+        min: 1,
+        default: 1
     },
     price: {
         type: Number,
         required: true,
         min: 0
     },
-    originalPrice: {
-        type: Number,
-        min: 0
+    name: {
+        type: String,
+        required: true
     },
-    category: {
+    image: {
+        type: String,
+        required: true
+    }
+});
+const CartSchema = new mongoose_1.Schema({
+    guestId: {
         type: String,
         required: true,
-        trim: true
+        unique: true,
+        index: true
     },
-    images: [{
-            type: String,
-            required: true
-        }],
-    colors: [{
-            type: String,
-            required: true
-        }],
-    inStock: {
-        type: Boolean,
-        default: true
-    },
-    stockQuantity: {
+    items: [CartItemSchema],
+    totalAmount: {
         type: Number,
         default: 0,
         min: 0
     },
-    rating: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 5
-    },
-    reviews: {
+    totalItems: {
         type: Number,
         default: 0,
         min: 0
-    },
-    discount: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 100
     }
 }, {
     timestamps: true
 });
-// Pre-save hook to automatically update inStock based on stockQuantity
-ProductSchema.pre('save', function (next) {
+// Calculate totals before saving
+CartSchema.pre('save', function (next) {
     // @ts-ignore
-    this.inStock = this.stockQuantity > 0;
+    this.totalItems = this.items.reduce((total, item) => total + item.quantity, 0);
+    // @ts-ignore
+    this.totalAmount = this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
     next();
 });
-// Pre-update hook for findOneAndUpdate operations
-ProductSchema.pre(['findOneAndUpdate', 'updateOne', 'updateMany'], function (next) {
-    const update = this.getUpdate();
-    if (update && update.$set && typeof update.$set.stockQuantity === 'number') {
-        update.$set.inStock = update.$set.stockQuantity > 0;
-    }
-    else if (update && typeof update.stockQuantity === 'number') {
-        update.inStock = update.stockQuantity > 0;
-    }
-    next();
-});
-// Index for better search performance
-ProductSchema.index({ name: 'text', description: 'text', category: 'text' });
-ProductSchema.index({ inStock: 1 });
-ProductSchema.index({ stockQuantity: 1 });
-exports.default = mongoose_1.default.model('Product', ProductSchema);
+// Index for better performance
+CartSchema.index({ guestId: 1 });
+CartSchema.index({ createdAt: 1 });
+exports.default = mongoose_1.default.model('Cart', CartSchema);
