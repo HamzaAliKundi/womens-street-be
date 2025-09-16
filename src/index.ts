@@ -12,7 +12,7 @@ connectDB();
 const app: Express = express();
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://admin.womenstreet.shop'],
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://admin.womenstreet.shop', "https://womenstreet.shop"],
   credentials: true
 }));
 
