@@ -12,7 +12,7 @@ connectDB();
 const app: Express = express();
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://pet-security-tag-dashboard.vercel.app', 'https://pet-security-admin.vercel.app'],
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://admin.womenstreet.shop'],
   credentials: true
 }));
 
