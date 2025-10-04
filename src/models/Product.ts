@@ -56,12 +56,10 @@ const ProductSchema: Schema = new Schema({
   }],
   material: {
     type: String,
-    required: true,
     trim: true
   },
   dimensions: {
     type: String,
-    required: true,
     trim: true
   },
   inStock: {
