@@ -49,12 +49,10 @@ const ProductSchema: Schema = new Schema({
     required: true
   }],
   colors: [{
-    type: String,
-    required: true
+    type: String
   }],
   sizes: [{
-    type: String,
-    required: true
+    type: String
   }],
   material: {
     type: String,
