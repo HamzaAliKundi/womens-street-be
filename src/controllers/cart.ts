@@ -34,7 +34,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response): Promise
 // Add item to cart
 export const addToCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { guestId } = req.params;
-  const { productId, quantity = 1 } = req.body;
+  const { productId, quantity = 1, selectedColor, selectedSize, selectedMaterial } = req.body;
 
   if (!guestId) {
     res.status(400).json({ message: 'Guest ID is required' });
@@ -71,8 +71,13 @@ export const addToCart = asyncHandler(async (req: Request, res: Response): Promi
     });
   }
 
-  // Check if item already exists in cart
-  const existingItemIndex = cart.items.findIndex(item => item.productId === productId);
+  // Check if item already exists in cart with same options
+  const existingItemIndex = cart.items.findIndex(item => 
+    item.productId === productId && 
+    item.selectedColor === selectedColor && 
+    item.selectedSize === selectedSize && 
+    item.selectedMaterial === selectedMaterial
+  );
 
   if (existingItemIndex > -1) {
     // Update quantity
@@ -92,7 +97,10 @@ export const addToCart = asyncHandler(async (req: Request, res: Response): Promi
       quantity,
       price: product.price,
       name: product.name,
-      image: product.images[0] || ''
+      image: product.images[0] || '',
+      selectedColor: selectedColor || undefined,
+      selectedSize: selectedSize || undefined,
+      selectedMaterial: selectedMaterial || undefined
     });
   }
 

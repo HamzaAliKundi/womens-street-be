@@ -60,7 +60,10 @@ export const createOrder = asyncHandler(async (req: Request, res: Response): Pro
       name: item.name,
       price: item.price,
       quantity: item.quantity,
-      image: item.image
+      image: item.image,
+      selectedColor: item.selectedColor,
+      selectedSize: item.selectedSize,
+      selectedMaterial: item.selectedMaterial
     })),
     customerDetails: {
       name: customerDetails.name,

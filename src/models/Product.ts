@@ -8,6 +8,9 @@ export interface IProduct extends Document {
   category: string;
   images: string[];
   colors: string[];
+  sizes: string[];
+  material: string;
+  dimensions: string;
   inStock: boolean;
   stockQuantity: number;
   rating: number;
@@ -49,6 +52,20 @@ const ProductSchema: Schema = new Schema({
     type: String,
     required: true
   }],
+  sizes: [{
+    type: String,
+    required: true
+  }],
+  material: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  dimensions: {
+    type: String,
+    required: true,
+    trim: true
+  },
   inStock: {
     type: Boolean,
     default: true
