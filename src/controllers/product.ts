@@ -12,6 +12,9 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
     category,
     images,
     colors,
+    sizes,
+    material,
+    dimensions,
     stockQuantity,
     discount
   } = req.body;
@@ -24,6 +27,9 @@ export const createProduct = asyncHandler(async (req: Request, res: Response): P
     category,
     images,
     colors,
+    sizes,
+    material,
+    dimensions,
     stockQuantity,
     discount: discount || 0,
     inStock: stockQuantity > 0
